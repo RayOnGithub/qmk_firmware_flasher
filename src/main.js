@@ -63,15 +63,8 @@ app.on('ready', function() {
     isSettingsInitialized = true;
   });
 
-  let menuWinXOffset;
-  let menuWinYOffset;
-  if (process.platform == "darwin") {
-    menuWinXOffset = 10;
-    menuWinYOffset = 470;
-  } else {
-    menuWinXOffset = 20;
-    menuWinYOffset = 490;
-  }
+  let menuWinXOffset = 10;   // From left edge
+  let menuWinYOffset = -10;  // From bottom edge
 
   menuWin = new BrowserWindow({
     width: 120,
@@ -90,9 +83,11 @@ app.on('ready', function() {
   global.mainWinId = mainWin.id;
 
   ipcMain.on('show-menu', () => {
+    left_edge = mainWin.getPosition()[0];
+    bottom_edge = mainWin.getPosition()[1] + mainWin.getSize()[1];
     menuWin.setPosition(
-      mainWin.getPosition()[0] + menuWinXOffset,
-      mainWin.getPosition()[1] + menuWinYOffset,
+      left_edge + menuWinXOffset,
+      bottom_edge + menuWinYOffset,
       false
     );
     menuWin.show();
