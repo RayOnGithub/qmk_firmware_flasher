@@ -154,7 +154,7 @@ function loadOptionsState() {
   bringToFrontCheckbox.prop('checked', ipcRenderer.sendSync('get-setting-focus-window-on-hex-change'));
 }
 
-function checkFile(filename = pathField.val()) {
+function checkFile(filename = pathField.text()) {
     if (filename.slice(-4).toUpperCase() == '.HEX') {
         return true;
     } else {
@@ -163,7 +163,7 @@ function checkFile(filename = pathField.val()) {
     }
 }
 
-function checkFileSilent(filename = pathField.val()) {
+function checkFileSilent(filename = pathField.text()) {
     return filename.slice(-4).toUpperCase() == '.HEX';
 }
 
@@ -216,7 +216,7 @@ function loadHex(filename) {
     return;
   }
 
-  pathField.val(filename);
+  pathField.text(filename);
   clearStatus();
 
 
@@ -323,7 +323,7 @@ function loadFile() {
 function flashFirmware() {
   if(!checkFile()) return;
   disableButton(flashButton);
-  sendHex(pathField.val(), function (success) {
+  sendHex(pathField.text(), function (success) {
       if (success) {
           sendStatus("Flashing complete!", true);
       } else {
