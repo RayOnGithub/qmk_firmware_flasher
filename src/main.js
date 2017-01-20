@@ -23,13 +23,27 @@ if(shouldQuit) {
 }
 
 app.on('ready', function() {
-  let mainWinOptions = {show: false, frame: true, resizable: false};
+  let mainWinOptions = {
+    show: false,
+    frame: true,
+    resizable: true,
+    maximizable: false,
+    fullscreen: false,
+    fullscreenable: false,
+    title: 'QMK Firmware Flasher',
+  };
   if (process.platform == 'win32') {
     mainWinOptions.width = 659;
-    mainWinOptions.height = 290;
+    mainWinOptions.height = 430;
+    mainWinOptions.minWidth = 659;
+    mainWinOptions.maxWidth = 659;
+    mainWinOptions.minHeight = 290;
   } else {
     mainWinOptions.width = 640;
-    mainWinOptions.height = 260;
+    mainWinOptions.height = 400;
+    mainWinOptions.minWidth = 640;
+    mainWinOptions.maxWidth = 640;
+    mainWinOptions.minHeight = 260;
   }
 
   mainWin = new BrowserWindow(mainWinOptions);
@@ -63,8 +77,16 @@ app.on('ready', function() {
     isSettingsInitialized = true;
   });
 
-  let menuWinXOffset = 10;   // From left edge
-  let menuWinYOffset = -10;  // From bottom edge
+  let menuWinXOffset;
+  let menuWinYOffset;
+
+  if (process.platform == 'win32') {
+    menuWinXOffset = 20;   // From left edge
+    menuWinYOffset = -20;  // From bottom edge
+  } else {
+    menuWinXOffset = 10;   // From left edge
+    menuWinYOffset = -10;  // From bottom edge
+  }
 
   menuWin = new BrowserWindow({
     width: 120,

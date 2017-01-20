@@ -33,7 +33,6 @@ let bringToFrontCheckbox = $('#bring-to-front-checkbox');
 let simple_tab = $('#simple');
 let expert_tab = $('#expert');
 let expertFeatures = $('#expert-features');
-let simpleStatus = $('#simple-status');
 let gearMenuButton = $('#gear-menu');
 let hexChangedFlashButton;
 
@@ -61,27 +60,17 @@ loadOptionsState();
 $(document).ready(function() {
 // Setup the tabs
   $('#simple').click(function() {
-    win_size = win.getSize();
-    if (win_size[1] > 330) {
-      simple_tab.css('background-color', '#ccc');
-      expert_tab.css('background-color', '#fff');
-      let y = win_size[1] - 330;
-      expertFeatures.hide();
-      simpleStatus.show();
-      win.setSize(win_size[0], y, true);
-    }
+    ui_mode = 'simple';
+    simple_tab.css('background-color', '#ccc');
+    expert_tab.css('background-color', '#fff');
+    expertFeatures.hide();
   });
 
   $('#expert').click(function() {
-    win_size = win.getSize();
-    if (win_size[1] < 330) {
-      simple_tab.css('background-color', '#fff');
-      expert_tab.css('background-color', '#ccc');
-      let y = win_size[1] + 330;
-      expertFeatures.show();
-      simpleStatus.hide();
-      win.setSize(win_size[0], y, true);
-    }
+    ui_mode = 'expert';
+    simple_tab.css('background-color', '#fff');
+    expert_tab.css('background-color', '#ccc');
+    expertFeatures.show();
   });
 
   // Handle drag-n-drop events
@@ -305,7 +294,6 @@ function handleFlashButton() {
 
 function clearStatus() {
   statusBox.text('');
-  simpleStatus.text('');
 }
 
 function writeStatus(text) {
@@ -315,13 +303,12 @@ function writeStatus(text) {
 
 function sendStatus(text, simple) {
   // Write a line to the status window.
-  // Always writes to the advanced window. If simple is true it will write
-  // to the simple window as well.
-  writeStatus('<b>' + text + "</b>\n");
-  if (simple) {
-    simpleStatus.append('<b>' + text + "</b>\n");
-    simpleStatus.scrollTop(simpleStatus.scrollHeight);
+  // If simple is false it will not write to the status window when 
+  // ui_mode == 'simple'
+  if (!simple && ui_mode == 'simple') {
+    return;
   }
+  writeStatus('<b>' + text + '</b>\n');
 }
 
 function loadFile() {
